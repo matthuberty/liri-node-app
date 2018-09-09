@@ -98,6 +98,9 @@ function spotifyCall(params) {
             return console.log('Error occurred: ' + err);
         }
         //console.log(JSON.parse(data).items[0].artists[0].name);
-        console.log(JSON.stringify(data));
+        console.log("The Artist:  " + (data).tracks.items[0].artists[0].name);
+        console.log("The Song's name:  " + params);
+        console.log("The Preview link of the song:  " + (data).tracks.items[0].artists[0].href);
+        console.log("The Album:  " + (data).tracks.items[0].album.name);
     });
 }
