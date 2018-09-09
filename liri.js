@@ -1,10 +1,11 @@
 // Include the npm packages
 var request = require("request");
 var Twitter = require("twitter");
-var Spotify = require("node-spotify-api");
+//var Spotify = require("node-spotify-api");
+var keys = require("./keys.js");
 
 //var spotify = new Spotify(keys.js);
-var client = new Twitter(keys.js);
+var client = new Twitter(keys.twitter);
 
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
@@ -12,6 +13,8 @@ var functionRun = process.argv[2];
 
 // Create an empty variable for holding the movie name
 var movieName = "";
+var paramPass = '';
+
 //Create an empty variable to pass a parameter to twitterCall().
 //The parameter is the screen name of Twitter
 var params = { screen_name: 'matt_huberty' };
