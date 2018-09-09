@@ -1,20 +1,10 @@
-// INSTRUCTIONS:
-// ---------------------------------------------------------------------------------------------------------
-// Level 1:
-// Take any movie with a word title (ex: Cinderella) 
-// as a Node argument and retrieve the year it was created
-
-// Level 2 (More Challenging):
-// Take a movie with multiple words (ex: Forrest Gump) 
-// as a Node argument and retrieve the year it was created.
-// ---------------------------------------------------------------------------------------------------------
-
-// Include the request npm package (Don't forget to run 
-// "npm install request" in this folder first!)
+// Include the npm packages
 var request = require("request");
+var Twitter = require("twitter");
+var Spotify = require("node-spotify-api");
 
-//var spotify = new Spotify(keys.spotify);
-//var client = new Twitter(keys.twitter);
+//var spotify = new Spotify(keys.js);
+var client = new Twitter(keys.js);
 
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
@@ -22,20 +12,35 @@ var functionRun = process.argv[2];
 
 // Create an empty variable for holding the movie name
 var movieName = "";
+//Create an empty variable to pass a parameter to twitterCall().
+//The parameter is the screen name of Twitter
+var params = { screen_name: 'matt_huberty' };
 
 // Loop through all the words in the node argument
 // And do a little for-loop magic to handle the inclusion of "+"s
 for (var i = 3; i < nodeArgs.length; i++) {
     if (i > 3 && i < nodeArgs.length) {
-        movieName = movieName + "+" + nodeArgs[i];
+        paramPass = paramPass + "+" + nodeArgs[i];
     }
     else {
-        movieName += nodeArgs[i];
+        paramPass += nodeArgs[i];
     }
 }
 
 if (functionRun === "movie-this") {
-    movieCall(movieName);
+    movieCall(paramPass);
+}
+if (functionRun === "my-tweets") {
+    twitterCall(params)
+}
+
+if (functionRun === "spotify-this-song"){
+    if (paramPass === ""){
+        spotifyCall("The Sign");
+    }
+    else{
+        spotifyCall(paramPass);
+    }
 }
 
 function movieCall(movieQuery) {
@@ -57,13 +62,21 @@ function movieCall(movieQuery) {
             // * Rotten Tomatoes Rating of the movie.
             console.log("Rotten Tomatoes Rating of the movie:  " + JSON.parse(body).Ratings[1].Value);
             // * Country where the movie was produced.
-            console.log("Country where the movie was produced:  " + JSON.parse(body).Country);   
+            console.log("Country where the movie was produced:  " + JSON.parse(body).Country);
             // * Language of the movie.
             console.log("Language of the film: " + JSON.parse(body).Language);
             // * Plot of the movie.
             console.log("Movie Plot: " + JSON.parse(body).Plot);
             // * Actors in the movie.
-            console.log("Movie Actors: " + JSON.parse(body).Actors);            
+            console.log("Movie Actors: " + JSON.parse(body).Actors);
+        }
+    });
+}
+
+function twitterCall(params) {
+    client.get('statuses/user_timeline', params, function (error, tweets, response) {
+        if (!error) {
+            console.log(tweets);
         }
     });
 }
