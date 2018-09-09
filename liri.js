@@ -1,17 +1,21 @@
 // Include the npm packages
 var request = require("request");
 var Twitter = require("twitter");
-//var Spotify = require("node-spotify-api");
+var Spotify = require("node-spotify-api");
 var keys = require("./keys.js");
 
 //var spotify = new Spotify(keys.spotify);
 //var client = new Twitter(keys.twitter);
+var spotify = new Spotify({
+    id: '82a553ded1894358ae44c98d11b392c0',
+    secret: 'be7d25d9c70b4fc19fd44b9583f9313d'
+});
 var client = new Twitter({
     consumer_key: 'C6mml83CgSDdxTw1bqg8VvA0Y',
     consumer_secret: 'MKvwkvB3jHKUofqQmxiB22jZj2mFFHWicBINSg64ngugLO3DYM',
     access_token_key: '89621384-AcOsdGQq0IILZjZgzR2pbcMenbmp9g6yQqmxnrJeW',
     access_token_secret: 'BjE7M1ypksVjMzK7x1ZWAjr5y88Zh33xS8t1ywvVA7Jaw'
-   });
+});
 
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
@@ -86,13 +90,14 @@ function movieCall(movieQuery) {
 function twitterCall(params) {
     //console.log("TwitterCall has been called  " + JSON.stringify(params));
     client.get('statuses/user_timeline', params, function (error, tweets, response) {
-        if (error){ 
+        if (error) {
             //Still not working...
             return console.log('Error occurred:  ' + JSON.stringify(error));
         }
         if (!error) {
-            console.log(JSON.stringify(tweets));
-            //console.log(respsonse);
+            for (var k = 0; k < 20; k++) {
+                console.log(tweets[k].text);
+            }
         }
     });
 }
@@ -103,7 +108,7 @@ function spotifyCall(params) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-        console.log(data);
+        console.log(JSON.stringify(data));
     });
 
 }
