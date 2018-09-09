@@ -2,20 +2,11 @@
 var request = require("request");
 var Twitter = require("twitter");
 var Spotify = require("node-spotify-api");
+require("dotenv").config();
 var keys = require("./keys.js");
 
-//var spotify = new Spotify(keys.spotify);
-//var client = new Twitter(keys.twitter);
-var spotify = new Spotify({
-    id: '82a553ded1894358ae44c98d11b392c0',
-    secret: 'be7d25d9c70b4fc19fd44b9583f9313d'
-});
-var client = new Twitter({
-    consumer_key: 'C6mml83CgSDdxTw1bqg8VvA0Y',
-    consumer_secret: 'MKvwkvB3jHKUofqQmxiB22jZj2mFFHWicBINSg64ngugLO3DYM',
-    access_token_key: '89621384-AcOsdGQq0IILZjZgzR2pbcMenbmp9g6yQqmxnrJeW',
-    access_token_secret: 'BjE7M1ypksVjMzK7x1ZWAjr5y88Zh33xS8t1ywvVA7Jaw'
-});
+var spotify = new Spotify(keys.spotify);
+var client = new Twitter(keys.twitter);
 
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
@@ -24,10 +15,6 @@ var functionRun = process.argv[2];
 // Create an empty variable for holding the movie name
 var movieName = "";
 var paramPass = '';
-
-//Create an empty variable to pass a parameter to twitterCall().
-//The parameter is the screen name of Twitter
-var params = { screen_name: 'matt_huberty' }; //?? 'matt_huberty'
 
 // Loop through all the words in the node argument
 // And do a little for-loop magic to handle the inclusion of "+"s
@@ -39,12 +26,14 @@ for (var i = 3; i < nodeArgs.length; i++) {
         paramPass += nodeArgs[i];
     }
 }
-//console.log("Function to call:  " + functionRun);
 
 if (functionRun === "movie-this") {
     movieCall(paramPass);
 }
 if (functionRun === "my-tweets") {
+    //Create an empty variable to pass a parameter to twitterCall().
+    //The parameter is the screen name of Twitter
+    var params = { screen_name: 'matt_huberty' }; //?? 'matt_huberty'
     twitterCall(params)
 }
 
@@ -103,12 +92,12 @@ function twitterCall(params) {
 }
 
 function spotifyCall(params) {
-    console.log("SpotifyCall has been called:  " + params);
+    //console.log("SpotifyCall has been called:  " + params);
     spotify.search({ type: 'track', query: params }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
+        //console.log(JSON.parse(data).items[0].artists[0].name);
         console.log(JSON.stringify(data));
     });
-
 }
