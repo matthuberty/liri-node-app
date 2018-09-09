@@ -48,20 +48,22 @@ function movieCall(movieQuery) {
         if (!error && response.statusCode === 200) {
 
             // Parse the body of the site and recover just the imdbRating
-            // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
             // * Title of the movie.
             console.log("The Title of the Movie:  " + JSON.parse(body).Title);
             // * Year the movie came out.
             console.log("Release Year: " + JSON.parse(body).Year);
             // * IMDB Rating of the movie.
-            console.log("Release Year: " + JSON.parse(body).Year);
+            console.log("IMDB Rating of the movie:  " + JSON.parse(body).Ratings[0].Value);
             // * Rotten Tomatoes Rating of the movie.
+            console.log("Rotten Tomatoes Rating of the movie:  " + JSON.parse(body).Ratings[1].Value);
             // * Country where the movie was produced.
+            console.log("Country where the movie was produced:  " + JSON.parse(body).Country);   
             // * Language of the movie.
+            console.log("Language of the film: " + JSON.parse(body).Language);
             // * Plot of the movie.
+            console.log("Movie Plot: " + JSON.parse(body).Plot);
             // * Actors in the movie.
-
-            
+            console.log("Movie Actors: " + JSON.parse(body).Actors);            
         }
     });
 }
