@@ -4,8 +4,14 @@ var Twitter = require("twitter");
 //var Spotify = require("node-spotify-api");
 var keys = require("./keys.js");
 
-//var spotify = new Spotify(keys.js);
-var client = new Twitter(keys.twitter);
+//var spotify = new Spotify(keys.spotify);
+//var client = new Twitter(keys.twitter);
+var client = new Twitter({
+    consumer_key: 'C6mml83CgSDdxTw1bqg8VvA0Y',
+    consumer_secret: 'MKvwkvB3jHKUofqQmxiB22jZj2mFFHWicBINSg64ngugLO3DYM',
+    access_token_key: '89621384-AcOsdGQq0IILZjZgzR2pbcMenbmp9g6yQqmxnrJeW',
+    access_token_secret: 'BjE7M1ypksVjMzK7x1ZWAjr5y88Zh33xS8t1ywvVA7Jaw'
+   });
 
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
@@ -17,7 +23,7 @@ var paramPass = '';
 
 //Create an empty variable to pass a parameter to twitterCall().
 //The parameter is the screen name of Twitter
-var params = { screen_name: 'matt_huberty' };
+var params = { screen_name: 'matt_huberty' }; //?? 'matt_huberty'
 
 // Loop through all the words in the node argument
 // And do a little for-loop magic to handle the inclusion of "+"s
@@ -29,6 +35,7 @@ for (var i = 3; i < nodeArgs.length; i++) {
         paramPass += nodeArgs[i];
     }
 }
+//console.log("Function to call:  " + functionRun);
 
 if (functionRun === "movie-this") {
     movieCall(paramPass);
@@ -37,11 +44,11 @@ if (functionRun === "my-tweets") {
     twitterCall(params)
 }
 
-if (functionRun === "spotify-this-song"){
-    if (paramPass === ""){
+if (functionRun === "spotify-this-song") {
+    if (paramPass === "") {
         spotifyCall("The Sign");
     }
-    else{
+    else {
         spotifyCall(paramPass);
     }
 }
@@ -77,10 +84,26 @@ function movieCall(movieQuery) {
 }
 
 function twitterCall(params) {
+    //console.log("TwitterCall has been called  " + JSON.stringify(params));
     client.get('statuses/user_timeline', params, function (error, tweets, response) {
+        if (error){ 
+            //Still not working...
+            return console.log('Error occurred:  ' + JSON.stringify(error));
+        }
         if (!error) {
-            console.log(tweets);
+            console.log(JSON.stringify(tweets));
+            //console.log(respsonse);
         }
     });
 }
 
+function spotifyCall(params) {
+    console.log("SpotifyCall has been called:  " + params);
+    spotify.search({ type: 'track', query: params }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        console.log(data);
+    });
+
+}
