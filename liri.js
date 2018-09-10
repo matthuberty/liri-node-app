@@ -5,6 +5,7 @@ var Spotify = require("node-spotify-api");
 require("dotenv").config();
 var keys = require("./keys.js");
 var fs = require("fs");
+var lineReader = require("line-reader");
 
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
@@ -29,7 +30,12 @@ for (var i = 3; i < nodeArgs.length; i++) {
 }
 
 if (functionRun === "movie-this") {
-    movieCall(paramPass);
+    if (paramPass === ''){
+        movieCall('Mr. Nobody');
+    }
+    else{
+        movieCall(paramPass);
+    }
 }
 if (functionRun === "my-tweets") {
     //Create an empty variable to pass a parameter to twitterCall().
@@ -107,10 +113,61 @@ function spotifyCall(params) {
         console.log("The Preview link of the song:  " + (data).tracks.items[0].artists[0].href);
         console.log("The Album:  " + (data).tracks.items[0].album.name);
     });
-}
+}   
 
 function doWhatItSays() {
-    var ReadMe = fs.readFileSync('random.txt', 'utf8');
-    console.log(ReadMe);
+    //fs.readFile('random.txt', 'utf8', function(err, data){ //var ReadMe = ??
+        // if (err){
+        //     console.log('Error occurred:  ' + err);
+        // }
+        //console.log(data);
+        //var command = data.substring(0, data.indexOf(','));
+        //console.log(command);
+        //var parameters = data.substring(data.indexOf(',') + 1, data.length);
+        //console.log(parameters);
 
+        lineReader.eachLine('random.txt', function(line, last) {
+            //console.log(line);
+            var command = line.substring(0, line.indexOf(','));
+            //console.log(command);
+            var parameters = line.substring(line.indexOf(',') + 1, line.length);
+            //console.log(parameters);
+            switch (command){
+                case "movie-this":
+                movieCall(parameters);
+                break;
+                case "my-tweets":
+                twitterCall(parameters);
+                break;
+                case "spotify-this-song":
+                spotifyCall(parameters);
+                break;
+                default:
+                console.log("");
+            }
+        //   }).then(function (err) {
+        //     if (err){
+        //         console.log(err);
+        //     }
+            if(last){
+                console.log("I'm done reading files!!");
+            }
+          });
+
+        // switch (command){
+        //     case "movie-this":
+        //     movieCall(parameters);
+        //     break;
+        //     case "my-tweets":
+        //     twitterCall(parameters);
+        //     break;
+        //     case "spotify-this-song":
+        //     spotifyCall(parameters);
+        //     break;
+        //     default:
+        //     console.log("No commands in the file");
+        // }
+        //console.log(fs.hasNextLine());
+
+    //});
 }
