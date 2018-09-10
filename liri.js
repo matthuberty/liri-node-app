@@ -4,6 +4,7 @@ var Twitter = require("twitter");
 var Spotify = require("node-spotify-api");
 require("dotenv").config();
 var keys = require("./keys.js");
+var fs = require("fs");
 
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
@@ -46,6 +47,9 @@ if (functionRun === "spotify-this-song") {
     }
 }
 
+if (functionRun === "do-what-it-says") {
+    doWhatItSays();
+}
 function movieCall(movieQuery) {
     // Then run a request to the OMDB API with the movie specified
     var queryUrl = "http://www.omdbapi.com/?t=" + movieQuery + "&y=&plot=short&apikey=f0032c14";
@@ -103,4 +107,10 @@ function spotifyCall(params) {
         console.log("The Preview link of the song:  " + (data).tracks.items[0].artists[0].href);
         console.log("The Album:  " + (data).tracks.items[0].album.name);
     });
+}
+
+function doWhatItSays() {
+    var ReadMe = fs.readFileSync('random.txt', 'utf8');
+    console.log(ReadMe);
+
 }
